@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+/* Question 1 */
+typedef struct Point {
+    double x;
+    double y;
+} Point;
+
+/* Question 2 */
+Point SaisiePoint() {
+    Point P;
+    printf("Donner l'abscisse x : ");
+    scanf("%lf", &P.x);
+    printf("Donner l'ordonnee y : ");
+    scanf("%lf", &P.y);
+    return P;
+}
+
+/* Question 3 */
+double Distance(Point P) {
+    return sqrt(P.x * P.x + P.y * P.y);
+}
+
+/* Question 5 */
+void AfficheTableau(Point T[], int n) {
+    int i;
+    for (i = 0; i < n; i++) {
+        printf("Point % d : (%.2f, %.2f) - Distance : %.2f\n", i + 1, T[i].x, T[i].y, Distance(T[i]));
+    }
+}
+
+/* Question 6 */
+void TrierTableau(Point T[], int n) {
+    int i, j;
+    Point tmp;
+    for (i = 0; i < n - 1; i++) {
+        for (j = i + 1; j < n; j++) {
+            if (Distance(T[i]) > Distance(T[j])) {
+                tmp = T[i];
+                T[i] = T[j];
+                T[j] = tmp;
+            }
+        }
+    }
+}
+
+/* Question 7 */
+int main() {
+    int n, i;
+
+    /* Question 4 (Version Statique) */
+    Point TStat[100];
+
+    /* Question 4 (Version Dynamique) */
+    Point *TDyn;
+
+    printf("Combien de points voulez-vous saisir ? ");
+    scanf("%d", &n);
+
+    TDyn = (Point *)malloc(n * sizeof(Point));
+    if (TDyn == NULL) {
+        return 1;
+    }
+
+    for (i = 0; i < n; i++) {
+        printf("\nSaisie du point %d :\n", i + 1);
+        TDyn[i] = SaisiePoint();
+    }
+
+    printf("\nTableau avant le tri :\n");
+    AfficheTableau(TDyn, n);
+
+    TrierTableau(TDyn, n);
+
+    printf("\nTableau apres le tri par distance :\n");
+    AfficheTableau(TDyn, n);
+
+    free(TDyn);
+    return 0;
+}
