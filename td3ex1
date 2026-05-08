@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Cellule {
+    int val;
+    struct Cellule *suivant;
+} Cellule, *Liste;
+
+Liste AdHead(int x, Liste L) {
+    Liste m = (Liste)malloc(sizeof(Cellule));
+    m->val = x; m->suivant = L;
+    return m;
+}
+
+void Affiche(Liste L) {
+    while (L != NULL) {
+        printf("%d -> ", L->val);
+        L = L->suivant;
+    }
+    printf("NULL\n");
+}
+
+void SuppMin(Liste *L) {
+    if (*L == NULL) return;
+    Liste curr = *L, prev = NULL, min_node = *L, prev_min = NULL;
+    while (curr != NULL) {
+        if (curr->val < min_node->val) {
+            min_node = curr;
+            prev_min = prev;
+        }
+        prev = curr;
+        curr = curr->suivant;
+    }
+    if (prev_min == NULL) *L = (*L)->suivant;
+    else prev_min->suivant = min_node->suivant;
+    free(min_node);
+}
+
+int main() {
+    Liste L = NULL;
+    L = AdHead(1, L); L = AdHead(7, L); L = AdHead(0, L); L = AdHead(150, L);
+    printf("Avant suppression du min : "); Affiche(L);
+    SuppMin(&L);
+    printf("Apres suppression du min : "); Affiche(L);
+    return 0;
+}
