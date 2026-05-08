@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// --- Structure de base ---
+typedef struct Cellule {
+    char val;
+    struct Cellule *suivant;
+} Cellule, *Liste;
+
+// --- Fonctions Pile (LIFO) ---
+void Empiler(char c, Liste *P) {
+    Liste m = (Liste)malloc(sizeof(Cellule));
+    m->val = c;
+    m->suivant = *P;
+    *P = m;
+}
+
+char Depiler(Liste *P) {
+    char c = (*P)->val;
+    Liste temp = *P;
+    *P = (*P)->suivant;
+    free(temp);
+    return c;
+}
+
+// --- Fonctions File (FIFO) ---
+void Enfiler(char c, Liste *File, Liste *Queue) {
+    Liste m = (Liste)malloc(sizeof(Cellule));
+    m->val = c;
+    m->suivant = NULL;
+    if (*File == NULL) *File = m;
+    else (*Queue)->suivant = m;
+    *Queue = m;
+}
+
+char Defiler(Liste *File) {
+    char c = (*File)->val;
+    Liste temp = *File;
+    *File = (*File)->suivant;
+    free(temp);
+    return c;
+}
+
+// --- Question 4 : Test Palindrome ---
+int estPalindrome(char mot[]) {
+    Liste P = NULL;        // Pile
+    Liste F = NULL, Q = NULL; // File (Tete et Queue)
+    int i, n = strlen(mot);
+
+    for (i = 0; i < n; i++) {
+        Empiler(mot[i], &P);
+        Enfiler(mot[i], &F, &Q);
+    }
+
+    for (i = 0; i < n; i++) {
+        if (Depiler(&P) != Defiler(&F)) return 0; // Pas palindrome
+    }
+    return 1; // C'est un palindrome
+}
+
+int main() {
+    char mot[20];
+    printf("Entrez un mot : ");
+    scanf("%s", mot);
+
+    if (estPalindrome(mot))
+        printf("Le mot '%s' est un PALINDROME.\n", mot);
+    else
+        printf("Le mot '%s' n'est PAS un palindrome.\n", mot);
+
+    return 0;
+}
