@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+/* Question 1 */
+typedef struct Heure {
+    int h;
+    int m;
+    int s;
+} Heure;
+
+/* Question 2 */
+long HeureEnSecondes(Heure t) {
+    return (long)t.h * 3600 + t.m * 60 + t.s;
+}
+
+/* Question 3 */
+Heure SecondesEnHeure(long s) {
+    Heure t;
+    t.h = s / 3600;
+    t.m = (s % 3600) / 60;
+    t.s = (s % 3600) % 60;
+    return t;
+}
+
+/* Question 4 */
+Heure Difference(Heure t1, Heure t2) {
+    long s1 = HeureEnSecondes(t1);
+    long s2 = HeureEnSecondes(t2);
+    long diff = s1 - s2;
+
+    if (diff < 0) diff = -diff;
+
+    return SecondesEnHeure(diff);
+}
+
+/* Question 5 */
+int main() {
+    Heure h1, h2, res;
+
+    printf("Saisie de la premiere heure :\n");
+    printf("Heures : "); scanf("%d", &h1.h);
+    printf("Minutes : "); scanf("%d", &h1.m);
+    printf("Secondes : "); scanf("%d", &h1.s);
+
+    printf("\nSaisie de la deuxieme heure :\n");
+    printf("Heures : "); scanf("%d", &h2.h);
+    printf("Minutes : "); scanf("%d", &h2.m);
+    printf("Secondes : "); scanf("%d", &h2.s);
+
+    res = Difference(h1, h2);
+    printf("\nLa difference entre les deux heures est : %02d:%02d:%02d\n", res.h, res.m, res.s);
+
+    return 0;
+}
