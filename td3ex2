@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Cellule {
+    int val;
+    struct Cellule *suivant;
+} Cellule, *Liste;
+
+Liste AdHead(int x, Liste L) {
+    Liste m = (Liste)malloc(sizeof(Cellule));
+    m->val = x; m->suivant = L;
+    return m;
+}
+
+void Affiche(Liste L) {
+    while (L != NULL) {
+        printf("%d -> ", L->val);
+        L = L->suivant;
+    }
+    printf("NULL\n");
+}
+
+Liste Fusion(Liste L1, Liste L2) {
+    if (L1 == NULL) return L2;
+    if (L2 == NULL) return L1;
+    Liste L3 = NULL;
+    if (L1->val < L2->val) {
+        L3 = L1;
+        L3->suivant = Fusion(L1->suivant, L2);
+    } else {
+        L3 = L2;
+        L3->suivant = Fusion(L1, L2->suivant);
+    }
+    return L3;
+}
+
+int main() {
+    Liste L1 = NULL, L2 = NULL;
+    // On cree deux listes triees
+    L1 = AdHead(30, AdHead(10, NULL));
+    L2 = AdHead(20, AdHead(5, NULL));
+
+    printf("Liste 1 : "); Affiche(L1);
+    printf("Liste 2 : "); Affiche(L2);
+
+    Liste L3 = Fusion(L1, L2);
+    printf("Liste fusionnee et triee : "); Affiche(L3);
+
+    return 0;
+}
